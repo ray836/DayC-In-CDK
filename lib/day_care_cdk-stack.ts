@@ -50,35 +50,35 @@ export class DayCareCdkStack extends cdk.Stack {
     this.cdkBuildOutput = new Artifact('CdkBuildOutput');
     this.serviceBuildOutput = new Artifact('ServiceBuildOutput');
 
-    // this.pipeline.addStage({
-    //   stageName: "Build",
-    //   actions: [
-    //     new CodeBuildAction({
-    //       actionName: "CDK_BUILD",
-    //       input: cdkSourceOutput,
-    //       outputs: [this.cdkBuildOutput],
-    //       project: new PipelineProject(this, 'CdkBuildProject', {
-    //         environment: {
-    //           buildImage: LinuxBuildImage.STANDARD_5_0
-    //         },
-    //         buildSpec: BuildSpec.fromSourceFilename('build-specs/cdk-build-spec.yml')
-    //       })
-    //     }),
-    //     new CodeBuildAction({
-    //       actionName: "Service_Build",
-    //       input: this.serviceSourceOutput,
-    //       outputs: [this.serviceBuildOutput],
-    //       project: new PipelineProject(this, "ServiceBuildProject", {
-    //         environment: {
-    //           buildImage: LinuxBuildImage.STANDARD_5_0,
-    //         },
-    //         buildSpec: BuildSpec.fromSourceFilename(
-    //           "build-specs/service-build-spec.yml"
-    //         ),
-    //       }),
-    //     }),
-    //   ]
-    // });
+    this.pipeline.addStage({
+      stageName: "Build",
+      actions: [
+        new CodeBuildAction({
+          actionName: "CDK_BUILD",
+          input: cdkSourceOutput,
+          outputs: [this.cdkBuildOutput],
+          project: new PipelineProject(this, 'CdkBuildProject', {
+            environment: {
+              buildImage: LinuxBuildImage.STANDARD_5_0
+            },
+            buildSpec: BuildSpec.fromSourceFilename('build-specs/cdk-build-spec.yml')
+          })
+        }),
+        new CodeBuildAction({
+          actionName: "Service_Build",
+          input: this.serviceSourceOutput,
+          outputs: [this.serviceBuildOutput],
+          project: new PipelineProject(this, "ServiceBuildProject", {
+            environment: {
+              buildImage: LinuxBuildImage.STANDARD_5_0,
+            },
+            buildSpec: BuildSpec.fromSourceFilename(
+              "build-specs/service-build-spec.yml"
+            ),
+          }),
+        }),
+      ]
+    });
 
     this.pipeline.addStage({
       stageName: "Pipeline_Update",
