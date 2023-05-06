@@ -1,7 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { SecretValue } from 'aws-cdk-lib';
 import { BuildSpec, LinuxBuildImage, PipelineProject } from 'aws-cdk-lib/aws-codebuild';
-import { Artifact, Pipeline } from 'aws-cdk-lib/aws-codepipeline';
+import { Artifact, IStage, Pipeline } from 'aws-cdk-lib/aws-codepipeline';
 import { CloudFormationCreateUpdateStackAction, CodeBuildAction, GitHubSourceAction } from 'aws-cdk-lib/aws-codepipeline-actions';
 import { Construct } from 'constructs';
 
@@ -21,6 +21,10 @@ export class DayCareCdkStack extends cdk.Stack {
     });
 
     const cdkSourceOutput = new Artifact('CDKSourceOutput');
+
+    this.serviceSourceOutput = new Artifact('ServiceSourceOutput');
+
+
     this.pipeline.addStage({
       stageName: 'Source',
       actions: [
@@ -42,6 +46,9 @@ export class DayCareCdkStack extends cdk.Stack {
         })
       ]
     })
+
+    this.cdkBuildOutput = new Artifact('CdkBuildOutput');
+    this.serviceBuildOutput = new Artifact('ServiceBuildOutput');
 
     this.pipeline.addStage({
       stageName: "Build",
@@ -84,7 +91,6 @@ export class DayCareCdkStack extends cdk.Stack {
         })
       ]
     });
-
 
   }
 }
