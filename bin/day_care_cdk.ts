@@ -2,6 +2,7 @@
 import 'source-map-support/register';
 import * as cdk from 'aws-cdk-lib';
 import { DayCareCdkStack } from '../lib/day_care_cdk-stack';
+import { ServiceStack } from '../lib/constructs/service-stack';
 
 const app = new cdk.App();
 new DayCareCdkStack(app, 'DayCareCdkStack', {
@@ -19,3 +20,7 @@ new DayCareCdkStack(app, 'DayCareCdkStack', {
 
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
+
+const serviceStackTest = new ServiceStack(app, 'ServiceStackTest', {
+  stageName: "Test"
+})

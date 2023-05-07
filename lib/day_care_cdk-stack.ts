@@ -4,6 +4,7 @@ import { BuildSpec, LinuxBuildImage, PipelineProject } from 'aws-cdk-lib/aws-cod
 import { Artifact, IStage, Pipeline } from 'aws-cdk-lib/aws-codepipeline';
 import { CloudFormationCreateUpdateStackAction, CodeBuildAction, GitHubSourceAction } from 'aws-cdk-lib/aws-codepipeline-actions';
 import { Construct } from 'constructs';
+import { ServiceStack } from './constructs/service-stack';
 
 export class DayCareCdkStack extends cdk.Stack {
   private readonly pipeline: Pipeline;
@@ -92,5 +93,23 @@ export class DayCareCdkStack extends cdk.Stack {
       ]
     });
 
+  }
+
+  public addServiceStage(serviceStack: ServiceStack, stageName: string): IStage {
+    return this.pipeline.addStage({
+      stageName: stageName,
+      actions: [
+        new CloudFormationCreateUpdateStackAction({
+          actionName: "Service_Update",
+          stackName: serviceStack.stackName,
+          templatePath: this.cdkBuildOutput.atPath(`${serviceStack.stackName}.template.json`),
+          adminPermissions: true,
+          parameterOverrides: {
+            ...serviceStack.serviceCode.assign(this.serviceBuildOutput.s3Location)
+          },
+          extraInputs: [this.serviceBuildOutput]
+        })
+      ]
+    })
   }
 }
