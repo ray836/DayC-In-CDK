@@ -21,11 +21,11 @@ const pipelineStack = new DayCareCdkStack(app, 'DayCareCdkStack', {
   /* For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html */
 });
 
-const serviceStackTest = new ServiceStack(app, 'ServiceStackTest', {
+const serviceStackTest = new ServiceStack(app, 'DCareServiceStackTest', {
   stageName: "Test"
 })
 
-const serviceStackProd = new ServiceStack(app, "ServiceStackProd", {
+const serviceStackProd = new ServiceStack(app, "DCareServiceStackProd", {
   stageName: "Prod"
 });
 
