@@ -15,15 +15,15 @@ export class DayCareCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    this.pipeline = new Pipeline(this, 'Pipeline', {
+    this.pipeline = new Pipeline(this, 'DcarePipeline', {
       pipelineName: 'Day-Care-Pipeline',
       crossAccountKeys: false,
       restartExecutionOnUpdate: true
     });
 
-    const cdkSourceOutput = new Artifact('CDKSourceOutput');
+    const cdkSourceOutput = new Artifact('DcareCDKSourceOutput');
 
-    this.serviceSourceOutput = new Artifact('ServiceSourceOutput');
+    this.serviceSourceOutput = new Artifact('DcareServiceSourceOutput');
 
 
     this.pipeline.addStage({
@@ -48,8 +48,8 @@ export class DayCareCdkStack extends cdk.Stack {
       ]
     })
 
-    this.cdkBuildOutput = new Artifact('CdkBuildOutput');
-    this.serviceBuildOutput = new Artifact('ServiceBuildOutput');
+    this.cdkBuildOutput = new Artifact('DcareCdkBuildOutput');
+    this.serviceBuildOutput = new Artifact('DcareServiceBuildOutput');
 
     this.pipeline.addStage({
       stageName: "Build",
@@ -58,7 +58,7 @@ export class DayCareCdkStack extends cdk.Stack {
           actionName: "CDK_BUILD",
           input: cdkSourceOutput,
           outputs: [this.cdkBuildOutput],
-          project: new PipelineProject(this, 'CdkBuildProject', {
+          project: new PipelineProject(this, 'DcareCdkBuildProject', {
             environment: {
               buildImage: LinuxBuildImage.STANDARD_5_0
             },
@@ -69,7 +69,7 @@ export class DayCareCdkStack extends cdk.Stack {
           actionName: "Service_Build",
           input: this.serviceSourceOutput,
           outputs: [this.serviceBuildOutput],
-          project: new PipelineProject(this, "ServiceBuildProject", {
+          project: new PipelineProject(this, "DcareServiceBuildProject", {
             environment: {
               buildImage: LinuxBuildImage.STANDARD_5_0,
             },

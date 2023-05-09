@@ -10,7 +10,7 @@ exports[`Pipeline Stack 1`] = `
     },
   },
   "Resources": {
-    "CdkBuildProject9382C38D": {
+    "DcareCdkBuildProject5D1E075A": {
       "Properties": {
         "Artifacts": {
           "Type": "CODEPIPELINE",
@@ -28,7 +28,7 @@ exports[`Pipeline Stack 1`] = `
         },
         "ServiceRole": {
           "Fn::GetAtt": [
-            "CdkBuildProjectRoleE0B6FEB0",
+            "DcareCdkBuildProjectRole3067B0CF",
             "Arn",
           ],
         },
@@ -39,7 +39,24 @@ exports[`Pipeline Stack 1`] = `
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "CdkBuildProjectRoleDefaultPolicy3C7ECB00": {
+    "DcareCdkBuildProjectRole3067B0CF": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "DcareCdkBuildProjectRoleDefaultPolicyF730DB81": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -69,7 +86,7 @@ exports[`Pipeline Stack 1`] = `
                       },
                       ":log-group:/aws/codebuild/",
                       {
-                        "Ref": "CdkBuildProject9382C38D",
+                        "Ref": "DcareCdkBuildProject5D1E075A",
                       },
                     ],
                   ],
@@ -92,7 +109,7 @@ exports[`Pipeline Stack 1`] = `
                       },
                       ":log-group:/aws/codebuild/",
                       {
-                        "Ref": "CdkBuildProject9382C38D",
+                        "Ref": "DcareCdkBuildProject5D1E075A",
                       },
                       ":*",
                     ],
@@ -127,7 +144,7 @@ exports[`Pipeline Stack 1`] = `
                     },
                     ":report-group/",
                     {
-                      "Ref": "CdkBuildProject9382C38D",
+                      "Ref": "DcareCdkBuildProject5D1E075A",
                     },
                     "-*",
                   ],
@@ -151,7 +168,7 @@ exports[`Pipeline Stack 1`] = `
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "PipelineArtifactsBucket22248F97",
+                    "DcarePipelineArtifactsBucketBD2BE6D7",
                     "Arn",
                   ],
                 },
@@ -161,7 +178,7 @@ exports[`Pipeline Stack 1`] = `
                     [
                       {
                         "Fn::GetAtt": [
-                          "PipelineArtifactsBucket22248F97",
+                          "DcarePipelineArtifactsBucketBD2BE6D7",
                           "Arn",
                         ],
                       },
@@ -174,234 +191,24 @@ exports[`Pipeline Stack 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "CdkBuildProjectRoleDefaultPolicy3C7ECB00",
+        "PolicyName": "DcareCdkBuildProjectRoleDefaultPolicyF730DB81",
         "Roles": [
           {
-            "Ref": "CdkBuildProjectRoleE0B6FEB0",
+            "Ref": "DcareCdkBuildProjectRole3067B0CF",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "CdkBuildProjectRoleE0B6FEB0": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "codebuild.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "PipelineArtifactsBucket22248F97": {
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "BucketEncryption": {
-          "ServerSideEncryptionConfiguration": [
-            {
-              "ServerSideEncryptionByDefault": {
-                "SSEAlgorithm": "aws:kms",
-              },
-            },
-          ],
-        },
-        "PublicAccessBlockConfiguration": {
-          "BlockPublicAcls": true,
-          "BlockPublicPolicy": true,
-          "IgnorePublicAcls": true,
-          "RestrictPublicBuckets": true,
-        },
-      },
-      "Type": "AWS::S3::Bucket",
-      "UpdateReplacePolicy": "Retain",
-    },
-    "PipelineArtifactsBucketPolicyD4F9712A": {
-      "Properties": {
-        "Bucket": {
-          "Ref": "PipelineArtifactsBucket22248F97",
-        },
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "s3:*",
-              "Condition": {
-                "Bool": {
-                  "aws:SecureTransport": "false",
-                },
-              },
-              "Effect": "Deny",
-              "Principal": {
-                "AWS": "*",
-              },
-              "Resource": [
-                {
-                  "Fn::GetAtt": [
-                    "PipelineArtifactsBucket22248F97",
-                    "Arn",
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "PipelineArtifactsBucket22248F97",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::S3::BucketPolicy",
-    },
-    "PipelineBuildCDKBUILDCodePipelineActionRoleB7EB2649": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "PipelineBuildCDKBUILDCodePipelineActionRoleDefaultPolicyF51CC230": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "CdkBuildProject9382C38D",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "PipelineBuildCDKBUILDCodePipelineActionRoleDefaultPolicyF51CC230",
-        "Roles": [
-          {
-            "Ref": "PipelineBuildCDKBUILDCodePipelineActionRoleB7EB2649",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "PipelineBuildServiceBuildCodePipelineActionRole584B0FA3": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "PipelineBuildServiceBuildCodePipelineActionRoleDefaultPolicyE6A14559": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "ServiceBuildProject6D228AFA",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "PipelineBuildServiceBuildCodePipelineActionRoleDefaultPolicyE6A14559",
-        "Roles": [
-          {
-            "Ref": "PipelineBuildServiceBuildCodePipelineActionRole584B0FA3",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "PipelineC660917D": {
+    "DcarePipeline88E1F4E5": {
       "DependsOn": [
-        "PipelineRoleDefaultPolicyC7A05455",
-        "PipelineRoleD68726F7",
+        "DcarePipelineRoleDefaultPolicy60967319",
+        "DcarePipelineRole1D36FB58",
       ],
       "Properties": {
         "ArtifactStore": {
           "Location": {
-            "Ref": "PipelineArtifactsBucket22248F97",
+            "Ref": "DcarePipelineArtifactsBucketBD2BE6D7",
           },
           "Type": "S3",
         },
@@ -409,7 +216,7 @@ exports[`Pipeline Stack 1`] = `
         "RestartExecutionOnUpdate": true,
         "RoleArn": {
           "Fn::GetAtt": [
-            "PipelineRoleD68726F7",
+            "DcarePipelineRole1D36FB58",
             "Arn",
           ],
         },
@@ -433,7 +240,7 @@ exports[`Pipeline Stack 1`] = `
                 "Name": "Pipeline_Source",
                 "OutputArtifacts": [
                   {
-                    "Name": "CDKSourceOutput",
+                    "Name": "DcareCDKSourceOutput",
                   },
                 ],
                 "RunOrder": 1,
@@ -455,7 +262,7 @@ exports[`Pipeline Stack 1`] = `
                 "Name": "Backend_Source",
                 "OutputArtifacts": [
                   {
-                    "Name": "ServiceSourceOutput",
+                    "Name": "DcareServiceSourceOutput",
                   },
                 ],
                 "RunOrder": 1,
@@ -474,23 +281,23 @@ exports[`Pipeline Stack 1`] = `
                 },
                 "Configuration": {
                   "ProjectName": {
-                    "Ref": "CdkBuildProject9382C38D",
+                    "Ref": "DcareCdkBuildProject5D1E075A",
                   },
                 },
                 "InputArtifacts": [
                   {
-                    "Name": "CDKSourceOutput",
+                    "Name": "DcareCDKSourceOutput",
                   },
                 ],
                 "Name": "CDK_BUILD",
                 "OutputArtifacts": [
                   {
-                    "Name": "CdkBuildOutput",
+                    "Name": "DcareCdkBuildOutput",
                   },
                 ],
                 "RoleArn": {
                   "Fn::GetAtt": [
-                    "PipelineBuildCDKBUILDCodePipelineActionRoleB7EB2649",
+                    "DcarePipelineBuildCDKBUILDCodePipelineActionRole2BFE47CD",
                     "Arn",
                   ],
                 },
@@ -505,23 +312,23 @@ exports[`Pipeline Stack 1`] = `
                 },
                 "Configuration": {
                   "ProjectName": {
-                    "Ref": "ServiceBuildProject6D228AFA",
+                    "Ref": "DcareServiceBuildProjectD26A0077",
                   },
                 },
                 "InputArtifacts": [
                   {
-                    "Name": "ServiceSourceOutput",
+                    "Name": "DcareServiceSourceOutput",
                   },
                 ],
                 "Name": "Service_Build",
                 "OutputArtifacts": [
                   {
-                    "Name": "ServiceBuildOutput",
+                    "Name": "DcareServiceBuildOutput",
                   },
                 ],
                 "RoleArn": {
                   "Fn::GetAtt": [
-                    "PipelineBuildServiceBuildCodePipelineActionRole584B0FA3",
+                    "DcarePipelineBuildServiceBuildCodePipelineActionRoleFFE3A4B4",
                     "Arn",
                   ],
                 },
@@ -544,22 +351,22 @@ exports[`Pipeline Stack 1`] = `
                   "Capabilities": "CAPABILITY_NAMED_IAM",
                   "RoleArn": {
                     "Fn::GetAtt": [
-                      "PipelinePipelineUpdateRoleAA43880D",
+                      "DcarePipelinePipelineUpdateRoleCBE1704B",
                       "Arn",
                     ],
                   },
-                  "StackName": "PipelineCourseStack",
-                  "TemplatePath": "CdkBuildOutput::PipelineCourseStack.template.json",
+                  "StackName": "DayCareCdkStack",
+                  "TemplatePath": "DcareCdkBuildOutput::DayCareCdkStack.template.json",
                 },
                 "InputArtifacts": [
                   {
-                    "Name": "CdkBuildOutput",
+                    "Name": "DcareCdkBuildOutput",
                   },
                 ],
                 "Name": "Pipeline_Update",
                 "RoleArn": {
                   "Fn::GetAtt": [
-                    "PipelinePipelineUpdateCodePipelineActionRoleF10AA166",
+                    "DcarePipelinePipelineUpdateCodePipelineActionRole9DE699A9",
                     "Arn",
                   ],
                 },
@@ -572,7 +379,232 @@ exports[`Pipeline Stack 1`] = `
       },
       "Type": "AWS::CodePipeline::Pipeline",
     },
-    "PipelinePipelineUpdateCodePipelineActionRoleDefaultPolicy024C1709": {
+    "DcarePipelineArtifactsBucketBD2BE6D7": {
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "BucketEncryption": {
+          "ServerSideEncryptionConfiguration": [
+            {
+              "ServerSideEncryptionByDefault": {
+                "SSEAlgorithm": "aws:kms",
+              },
+            },
+          ],
+        },
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "BlockPublicPolicy": true,
+          "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": true,
+        },
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Retain",
+    },
+    "DcarePipelineArtifactsBucketPolicy472B27E3": {
+      "Properties": {
+        "Bucket": {
+          "Ref": "DcarePipelineArtifactsBucketBD2BE6D7",
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "s3:*",
+              "Condition": {
+                "Bool": {
+                  "aws:SecureTransport": "false",
+                },
+              },
+              "Effect": "Deny",
+              "Principal": {
+                "AWS": "*",
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "DcarePipelineArtifactsBucketBD2BE6D7",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "DcarePipelineArtifactsBucketBD2BE6D7",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "DcarePipelineBuildCDKBUILDCodePipelineActionRole2BFE47CD": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "DcarePipelineBuildCDKBUILDCodePipelineActionRoleDefaultPolicy792C5C3D": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "DcareCdkBuildProject5D1E075A",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "DcarePipelineBuildCDKBUILDCodePipelineActionRoleDefaultPolicy792C5C3D",
+        "Roles": [
+          {
+            "Ref": "DcarePipelineBuildCDKBUILDCodePipelineActionRole2BFE47CD",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "DcarePipelineBuildServiceBuildCodePipelineActionRoleDefaultPolicyB5249316": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "codebuild:BatchGetBuilds",
+                "codebuild:StartBuild",
+                "codebuild:StopBuild",
+              ],
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "DcareServiceBuildProjectD26A0077",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "DcarePipelineBuildServiceBuildCodePipelineActionRoleDefaultPolicyB5249316",
+        "Roles": [
+          {
+            "Ref": "DcarePipelineBuildServiceBuildCodePipelineActionRoleFFE3A4B4",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "DcarePipelineBuildServiceBuildCodePipelineActionRoleFFE3A4B4": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "DcarePipelinePipelineUpdateCodePipelineActionRole9DE699A9": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition",
+                      },
+                      ":iam::",
+                      {
+                        "Ref": "AWS::AccountId",
+                      },
+                      ":root",
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "DcarePipelinePipelineUpdateCodePipelineActionRoleDefaultPolicyB92933A6": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -581,7 +613,7 @@ exports[`Pipeline Stack 1`] = `
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "PipelinePipelineUpdateRoleAA43880D",
+                  "DcarePipelinePipelineUpdateRoleCBE1704B",
                   "Arn",
                 ],
               },
@@ -596,7 +628,7 @@ exports[`Pipeline Stack 1`] = `
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "PipelineArtifactsBucket22248F97",
+                    "DcarePipelineArtifactsBucketBD2BE6D7",
                     "Arn",
                   ],
                 },
@@ -606,7 +638,7 @@ exports[`Pipeline Stack 1`] = `
                     [
                       {
                         "Fn::GetAtt": [
-                          "PipelineArtifactsBucket22248F97",
+                          "DcarePipelineArtifactsBucketBD2BE6D7",
                           "Arn",
                         ],
                       },
@@ -643,7 +675,7 @@ exports[`Pipeline Stack 1`] = `
                     {
                       "Ref": "AWS::AccountId",
                     },
-                    ":stack/PipelineCourseStack/*",
+                    ":stack/DayCareCdkStack/*",
                   ],
                 ],
               },
@@ -651,48 +683,16 @@ exports[`Pipeline Stack 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "PipelinePipelineUpdateCodePipelineActionRoleDefaultPolicy024C1709",
+        "PolicyName": "DcarePipelinePipelineUpdateCodePipelineActionRoleDefaultPolicyB92933A6",
         "Roles": [
           {
-            "Ref": "PipelinePipelineUpdateCodePipelineActionRoleF10AA166",
+            "Ref": "DcarePipelinePipelineUpdateCodePipelineActionRole9DE699A9",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "PipelinePipelineUpdateCodePipelineActionRoleF10AA166": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":root",
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "PipelinePipelineUpdateRoleAA43880D": {
+    "DcarePipelinePipelineUpdateRoleCBE1704B": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -709,7 +709,7 @@ exports[`Pipeline Stack 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "PipelinePipelineUpdateRoleDefaultPolicyF5EA7F30": {
+    "DcarePipelinePipelineUpdateRoleDefaultPolicy69B05936": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -723,7 +723,7 @@ exports[`Pipeline Stack 1`] = `
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "PipelineArtifactsBucket22248F97",
+                    "DcarePipelineArtifactsBucketBD2BE6D7",
                     "Arn",
                   ],
                 },
@@ -733,7 +733,7 @@ exports[`Pipeline Stack 1`] = `
                     [
                       {
                         "Fn::GetAtt": [
-                          "PipelineArtifactsBucket22248F97",
+                          "DcarePipelineArtifactsBucketBD2BE6D7",
                           "Arn",
                         ],
                       },
@@ -751,16 +751,16 @@ exports[`Pipeline Stack 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "PipelinePipelineUpdateRoleDefaultPolicyF5EA7F30",
+        "PolicyName": "DcarePipelinePipelineUpdateRoleDefaultPolicy69B05936",
         "Roles": [
           {
-            "Ref": "PipelinePipelineUpdateRoleAA43880D",
+            "Ref": "DcarePipelinePipelineUpdateRoleCBE1704B",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "PipelineRoleD68726F7": {
+    "DcarePipelineRole1D36FB58": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -777,7 +777,7 @@ exports[`Pipeline Stack 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "PipelineRoleDefaultPolicyC7A05455": {
+    "DcarePipelineRoleDefaultPolicy60967319": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -798,7 +798,7 @@ exports[`Pipeline Stack 1`] = `
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "PipelineArtifactsBucket22248F97",
+                    "DcarePipelineArtifactsBucketBD2BE6D7",
                     "Arn",
                   ],
                 },
@@ -808,7 +808,7 @@ exports[`Pipeline Stack 1`] = `
                     [
                       {
                         "Fn::GetAtt": [
-                          "PipelineArtifactsBucket22248F97",
+                          "DcarePipelineArtifactsBucketBD2BE6D7",
                           "Arn",
                         ],
                       },
@@ -823,7 +823,7 @@ exports[`Pipeline Stack 1`] = `
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "PipelineBuildCDKBUILDCodePipelineActionRoleB7EB2649",
+                  "DcarePipelineBuildCDKBUILDCodePipelineActionRole2BFE47CD",
                   "Arn",
                 ],
               },
@@ -833,7 +833,7 @@ exports[`Pipeline Stack 1`] = `
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "PipelineBuildServiceBuildCodePipelineActionRole584B0FA3",
+                  "DcarePipelineBuildServiceBuildCodePipelineActionRoleFFE3A4B4",
                   "Arn",
                 ],
               },
@@ -843,7 +843,7 @@ exports[`Pipeline Stack 1`] = `
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "PipelinePipelineUpdateCodePipelineActionRoleF10AA166",
+                  "DcarePipelinePipelineUpdateCodePipelineActionRole9DE699A9",
                   "Arn",
                 ],
               },
@@ -851,16 +851,16 @@ exports[`Pipeline Stack 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "PipelineRoleDefaultPolicyC7A05455",
+        "PolicyName": "DcarePipelineRoleDefaultPolicy60967319",
         "Roles": [
           {
-            "Ref": "PipelineRoleD68726F7",
+            "Ref": "DcarePipelineRole1D36FB58",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
     },
-    "PipelineSourceBackendSourceWebhookResource7FF5CA61": {
+    "DcarePipelineSourceBackendSourceWebhookResource893F3E2D": {
       "Properties": {
         "Authentication": "GITHUB_HMAC",
         "AuthenticationConfiguration": {
@@ -875,13 +875,13 @@ exports[`Pipeline Stack 1`] = `
         "RegisterWithThirdParty": true,
         "TargetAction": "Backend_Source",
         "TargetPipeline": {
-          "Ref": "PipelineC660917D",
+          "Ref": "DcarePipeline88E1F4E5",
         },
         "TargetPipelineVersion": 1,
       },
       "Type": "AWS::CodePipeline::Webhook",
     },
-    "PipelineSourcePipelineSourceWebhookResource7B23E466": {
+    "DcarePipelineSourcePipelineSourceWebhookResource3C80EB01": {
       "Properties": {
         "Authentication": "GITHUB_HMAC",
         "AuthenticationConfiguration": {
@@ -896,13 +896,13 @@ exports[`Pipeline Stack 1`] = `
         "RegisterWithThirdParty": true,
         "TargetAction": "Pipeline_Source",
         "TargetPipeline": {
-          "Ref": "PipelineC660917D",
+          "Ref": "DcarePipeline88E1F4E5",
         },
         "TargetPipelineVersion": 1,
       },
       "Type": "AWS::CodePipeline::Webhook",
     },
-    "ServiceBuildProject6D228AFA": {
+    "DcareServiceBuildProjectD26A0077": {
       "Properties": {
         "Artifacts": {
           "Type": "CODEPIPELINE",
@@ -920,7 +920,7 @@ exports[`Pipeline Stack 1`] = `
         },
         "ServiceRole": {
           "Fn::GetAtt": [
-            "ServiceBuildProjectRoleEB246009",
+            "DcareServiceBuildProjectRole7C775300",
             "Arn",
           ],
         },
@@ -931,7 +931,24 @@ exports[`Pipeline Stack 1`] = `
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "ServiceBuildProjectRoleDefaultPolicy29400A8A": {
+    "DcareServiceBuildProjectRole7C775300": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "codebuild.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "DcareServiceBuildProjectRoleDefaultPolicy1ACD0EAB": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -961,7 +978,7 @@ exports[`Pipeline Stack 1`] = `
                       },
                       ":log-group:/aws/codebuild/",
                       {
-                        "Ref": "ServiceBuildProject6D228AFA",
+                        "Ref": "DcareServiceBuildProjectD26A0077",
                       },
                     ],
                   ],
@@ -984,7 +1001,7 @@ exports[`Pipeline Stack 1`] = `
                       },
                       ":log-group:/aws/codebuild/",
                       {
-                        "Ref": "ServiceBuildProject6D228AFA",
+                        "Ref": "DcareServiceBuildProjectD26A0077",
                       },
                       ":*",
                     ],
@@ -1019,7 +1036,7 @@ exports[`Pipeline Stack 1`] = `
                     },
                     ":report-group/",
                     {
-                      "Ref": "ServiceBuildProject6D228AFA",
+                      "Ref": "DcareServiceBuildProjectD26A0077",
                     },
                     "-*",
                   ],
@@ -1043,7 +1060,7 @@ exports[`Pipeline Stack 1`] = `
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "PipelineArtifactsBucket22248F97",
+                    "DcarePipelineArtifactsBucketBD2BE6D7",
                     "Arn",
                   ],
                 },
@@ -1053,7 +1070,7 @@ exports[`Pipeline Stack 1`] = `
                     [
                       {
                         "Fn::GetAtt": [
-                          "PipelineArtifactsBucket22248F97",
+                          "DcarePipelineArtifactsBucketBD2BE6D7",
                           "Arn",
                         ],
                       },
@@ -1066,31 +1083,14 @@ exports[`Pipeline Stack 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "ServiceBuildProjectRoleDefaultPolicy29400A8A",
+        "PolicyName": "DcareServiceBuildProjectRoleDefaultPolicy1ACD0EAB",
         "Roles": [
           {
-            "Ref": "ServiceBuildProjectRoleEB246009",
+            "Ref": "DcareServiceBuildProjectRole7C775300",
           },
         ],
       },
       "Type": "AWS::IAM::Policy",
-    },
-    "ServiceBuildProjectRoleEB246009": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "codebuild.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::IAM::Role",
     },
   },
   "Rules": {
