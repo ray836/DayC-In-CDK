@@ -86,8 +86,8 @@ export class DayCareCdkStack extends cdk.Stack {
       actions: [
         new CloudFormationCreateUpdateStackAction({
           actionName: "Pipeline_Update",
-          stackName: "DayCareCdkStack",
-          templatePath: this.cdkBuildOutput.atPath("DayCareCdkStack.template.json"),
+          stackName: "DayCareCdkStack2",
+          templatePath: this.cdkBuildOutput.atPath("DayCareCdkStack2.template.json"),
           adminPermissions: true
         })
       ]
