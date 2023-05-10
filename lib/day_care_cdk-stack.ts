@@ -16,7 +16,7 @@ export class DayCareCdkStack extends cdk.Stack {
     super(scope, id, props);
 
     this.pipeline = new Pipeline(this, 'DcarePipeline', {
-      pipelineName: 'Day-Care-Pipeline',
+      pipelineName: 'Day-Care-Pipeline2',
       crossAccountKeys: false,
       restartExecutionOnUpdate: true
     });
