@@ -24,7 +24,7 @@ export class ServiceStack extends Stack {
 
 		const backend = new Function(this, 'DcareServiceLambda', {
 			runtime: Runtime.NODEJS_18_X,
-			handler: 'src.lambda.handler',
+			handler: 'src/lambda.handler',
 			code: this.serviceCode,
 			functionName: `DcareServiceLambda-${props.stageName}`,
 			description: `Generated on ${new Date().toISOString()}`
