@@ -34,7 +34,7 @@ export class ServiceStack extends Stack {
 
 		const api = new LambdaRestApi(this, 'DCareAPI', {
 			handler: backend,
-			restApiName: 'DayCareApi'
+			restApiName: `DayCareApi-${props.stageName}`
 		})
 
 	}
