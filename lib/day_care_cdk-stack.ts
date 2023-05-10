@@ -39,9 +39,9 @@ export class DayCareCdkStack extends cdk.Stack {
         }),
         new GitHubSourceAction({
           owner: 'ray836',
-          repo: 'DayC-In-Backend',
+          repo: 'Vendash-Backend',
           branch: 'main',
-          actionName: 'Backend_Source',
+          actionName: 'Service_Source',
           oauthToken: SecretValue.secretsManager('github-token'),
           output: this.serviceSourceOutput
         })
