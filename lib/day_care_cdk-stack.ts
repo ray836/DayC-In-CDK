@@ -48,8 +48,8 @@ export class DayCareCdkStack extends cdk.Stack {
       ]
     })
 
-    this.cdkBuildOutput = new Artifact('DcareCdkBuildOutput');
-    this.serviceBuildOutput = new Artifact('DcareServiceBuildOutput');
+    this.cdkBuildOutput = new Artifact('DCCdkBuildOutput');
+    this.serviceBuildOutput = new Artifact('DCServiceBuildOutput');
 
     this.pipeline.addStage({
       stageName: "Build",
@@ -58,7 +58,7 @@ export class DayCareCdkStack extends cdk.Stack {
           actionName: "CDK_BUILD",
           input: cdkSourceOutput,
           outputs: [this.cdkBuildOutput],
-          project: new PipelineProject(this, 'DcareCdkBuildProject', {
+          project: new PipelineProject(this, 'DCCdkBuildProject', {
             environment: {
               buildImage: LinuxBuildImage.STANDARD_5_0
             },
@@ -69,7 +69,7 @@ export class DayCareCdkStack extends cdk.Stack {
           actionName: "Service_Build",
           input: this.serviceSourceOutput,
           outputs: [this.serviceBuildOutput],
-          project: new PipelineProject(this, "DcareServiceBuildProject", {
+          project: new PipelineProject(this, "DCServiceBuildProject", {
             environment: {
               buildImage: LinuxBuildImage.STANDARD_5_0,
             },
