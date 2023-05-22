@@ -1,7 +1,7 @@
 import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
 import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
 import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
-import { Effect, ManagedPolicy, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
+import { Effect, ManagedPolicy, Policy, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { CfnParametersCode, Code, Function, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 
@@ -40,11 +40,17 @@ export class ServiceStack extends Stack {
 			role: lambdaARole,
 		});
 
-		// const pol = new PolicyStatement({
-		// 	effect: Effect.ALLOW,
-		// 	actions: ['dynamo:*'],
-		// 	resources: ['*']
-		// })
+		const pol = new PolicyStatement({
+			effect: Effect.ALLOW,
+			actions: ['dynamodb:*'],
+			resources: ['*']
+		})
+
+		backend.role?.attachInlinePolicy(
+			new Policy(this, 'dynamoPolicy', {
+				statements: [pol]
+			})
+		)
 
 		providerTable.grantReadWriteData(backend);
 
