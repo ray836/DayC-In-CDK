@@ -1,6 +1,7 @@
 import { CfnOutput, Stack, StackProps } from "aws-cdk-lib";
 import { LambdaRestApi } from "aws-cdk-lib/aws-apigateway";
 import { AttributeType, BillingMode, Table } from "aws-cdk-lib/aws-dynamodb";
+import { Effect, ManagedPolicy, PolicyStatement, Role, ServicePrincipal } from "aws-cdk-lib/aws-iam";
 import { CfnParametersCode, Code, Function, Runtime } from "aws-cdk-lib/aws-lambda";
 import { Construct } from "constructs";
 
@@ -22,13 +23,28 @@ export class ServiceStack extends Stack {
 			tableName: 'Provider'
 		});
 
+		const lambdaARole = new Role(this, 'LambdaRole', {
+			assumedBy: new ServicePrincipal('lambda.amazonaws.com'),
+		  });
+
+		  lambdaARole.addManagedPolicy(
+			ManagedPolicy.fromAwsManagedPolicyName('AmazonDynamoDBFullAccess')
+		  );
+
 		const backend = new Function(this, 'DcareServiceLambda', {
 			runtime: Runtime.NODEJS_18_X,
 			handler: 'src/lambda.handler',
 			code: this.serviceCode,
 			functionName: `DcareServiceLambda-${props.stageName}`,
-			description: `Generated on ${new Date().toISOString()}`
+			description: `Generated on ${new Date().toISOString()}`,
+			role: lambdaARole,
 		});
+
+		// const pol = new PolicyStatement({
+		// 	effect: Effect.ALLOW,
+		// 	actions: ['dynamo:*'],
+		// 	resources: ['*']
+		// })
 
 		providerTable.grantReadWriteData(backend);
 
